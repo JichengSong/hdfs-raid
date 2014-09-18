@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid
+END
+DistRaid.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/DistRaid.java
+END
+RaidNode.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/RaidNode.java
+END
+ConfigManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/ConfigManager.java
+END
+RaidShell.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/RaidShell.java
+END
+RaidConfigurationException.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/RaidConfigurationException.java
+END

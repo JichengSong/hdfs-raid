@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/hadoop/!svn/ver/538/hdfs-raid/bin
+END
+start-raidnode-remote.sh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/hadoop/!svn/ver/538/hdfs-raid/bin/start-raidnode-remote.sh
+END
+stop-raidnode-remote.sh
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/hadoop/!svn/ver/538/hdfs-raid/bin/stop-raidnode-remote.sh
+END
+start-raidnode.sh
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/hadoop/!svn/ver/538/hdfs-raid/bin/start-raidnode.sh
+END
+stop-raidnode.sh
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/hadoop/!svn/ver/538/hdfs-raid/bin/stop-raidnode.sh
+END

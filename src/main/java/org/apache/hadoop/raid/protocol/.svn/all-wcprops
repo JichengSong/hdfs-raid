@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/protocol
+END
+PolicyInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/protocol/PolicyInfo.java
+END
+PolicyList.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/protocol/PolicyList.java
+END
+RaidProtocol.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/hadoop/!svn/ver/537/hdfs-raid/src/main/java/org/apache/hadoop/raid/protocol/RaidProtocol.java
+END

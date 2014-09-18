@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+<!-- added for raid-->
+ <property>
+    <name>raid.config.file</name>
+    <!--<value>/home/bo.jiangb/hadoop-0.20/conf/raid-policy.xml</value>-->
+    <value>/data/spark/workspace.cnet/hdfs-raid/conf/raid.xml</value>
+  </property>
+  <property>
+    <name>dfs.block.replicator.classname</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.BlockPlacementPolicyRaid</value>
+  </property>
+
+  <property>
+    <name>raid.codecs.json</name>
+    <value>
+      [
+      {
+      "id"            : "xor",
+      "parity_dir"    : "/raid",
+      "stripe_length" : 10,
+      "parity_length" : 1,
+      "priority"      : 100,
+      "erasure_code"  : "org.apache.hadoop.raid.XorCode",
+      "description"   : "XOR code"
+      },
+      {
+      "id"            : "rs",
+      "parity_dir"    : "/raidrs",
+      "stripe_length" : 10,
+      "parity_length" : 4,
+      "priority"      : 300,
+      "erasure_code"  : "org.apache.hadoop.raid.ReedSolomonCode",
+      "description"   : "ReedSolomonCode code",
+      },
+      ]
+    </value>
+ </property>
+ <property>
+    <name>mapred.raid.http.address</name>
+    <value>10.2.43.177:60001</value>
+  </property>
+  <property>
+    <name>raid.server.address</name>
+    <value>10.2.43.177:60002</value>
+  </property>
+  <property>
+    <name>raid.configmanager.class</name>
+    <value>org.apache.hadoop.raid.FileConfigManager</value>
+  </property>
+
+<!--end for raid-->
+     <property>
+         <name>dfs.replication</name>
+         <value>3</value>
+     </property>
+     <property>
+         <name>dfs.namenode.name.dir</name>
+         <value>file:///data/hadoop0.21/dfs.namenode.name.dir</value>
+     </property>
+     <property>
+         <name>dfs.namenode.checkpoint.dir</name>
+         <value>file:///data/hadoop0.21/dfs.namenode.checkpoint.dir</value>
+     </property>
+     <property>
+         <name>dfs.namenode.http-address</name>
+         <value>10.4.19.42:50070</value>
+     </property>
+     <property>
+         <name>dfs.namenode.checkpoint.period</name>
+         <value>3600</value>
+     </property>
+     <property>
+         <name>dfs.hosts.exclude</name>
+         <value>/data/hadoop0.21/hadoop/conf/dfs.exclude</value>
+     </property>
+     <property>
+         <name>dfs.datanode.data.dir</name>
+         <value>file:///data1/hadoop/dfs.data,file:///data2/hadoop/dfs.data,file:///data3/hadoop/dfs.data,file:///data4/hadoop/dfs.data,file:///data5/hadoop/dfs.data,file:///data6/hadoop/dfs.data,file:///data7/hadoop/dfs.data,file:///data8/hadoop/dfs.data,file:///data9/hadoop/dfs.data,file:///data10/hadoop/dfs.data,file:///data11/hadoop/dfs.data,file:///data12/hadoop/dfs.data</value>
+     </property>
+     <property>
+         <name>dfs.datanode.du.reserved</name>
+         <value>5000000000</value>
+         <description>Reserved space in bytes per volume. Always leave this much space free for non dfs use.
+         </description>
+     </property>
+     <property>
+         <name>dfs.datanode.balance.bandwidthPerSec</name>
+         <value>512000000</value>
+     </property>
+     <property>
+         <name>dfs.blocksize</name>
+         <value>134217728</value>
+     </property>
+     <property>
+       <name>dfs.namenode.handler.count</name>
+       <value>50</value>
+       <description>The number of server threads for the namenode.</description>
+     </property>
+     <property>
+       <name>dfs.heartbeat.interval</name>
+       <value>10</value>
+       <description>Determines datanode heartbeat interval in seconds.</description>
+     </property>
+</configuration>
