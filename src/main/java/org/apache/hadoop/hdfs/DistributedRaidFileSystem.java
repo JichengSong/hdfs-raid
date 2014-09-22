@@ -62,20 +62,20 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
     stripeLength = 0;
   }
 
-  /* Initialize a Raid FileSystem
+  /*初始化： Initialize a Raid FileSystem
    */
   public void initialize(URI name, Configuration conf) throws IOException {
     this.conf = conf;
-
+    //fs.raid.underlyingfs.impl参数
     Class<?> clazz = conf.getClass("fs.raid.underlyingfs.impl",
         DistributedFileSystem.class);
     if (clazz == null) {
       throw new IOException("No FileSystem for fs.raid.underlyingfs.impl.");
     }
-    
+    //通过hadoop工具包中的反射工具,创建fs
     this.fs = (FileSystem)ReflectionUtils.newInstance(clazz, null); 
     super.initialize(name, conf);
-    
+    //raid的工作目录?,默认是/raid
     String alt = conf.get("hdfs.raid.locations");
     
     // If no alternates are specified, then behave absolutely same as 
@@ -93,7 +93,7 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
       return;
     }
 
-    // find stripe length configured
+    //条带的长度 find stripe length configured
     stripeLength = conf.getInt("hdfs.raid.stripeLength", RaidNode.DEFAULT_STRIPE_LENGTH);
     if (stripeLength == 0) {
       LOG.info("dfs.raid.stripeLength is incorrectly defined to be " + 
@@ -101,7 +101,7 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
       return;
     }
 
-    // create a reference to all underlying alternate path prefix
+    //将配置的要做raid的目录前缀放到alternates数组. create a reference to all underlying alternate path prefix
     alternates = new Path[strs.length];
     for (int i = 0; i < strs.length; i++) {
       alternates[i] = new Path(strs[i].trim());
@@ -133,7 +133,7 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
     }
   }
 
-  /**
+  /**分成文件系统的输入流. 当都去原始位置的文件遇到错误时,它将尝试读去备选位置的文件
    * Layered filesystem input stream. This input stream tries reading
    * from alternate locations if it encoumters read errors in the primary location.
    */
@@ -192,7 +192,7 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
         underLyingStream.reset();
         nextLocation = 0;
       }
-      
+      /**如果read时出现丢块等异常,则从RAID文件中获取正确的数据*/
       @Override
       public synchronized int read() throws IOException {
         long pos = underLyingStream.getPos();
@@ -201,9 +201,9 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
             int value = underLyingStream.read();
             nextLocation = 0;
             return value;
-          } catch (BlockMissingException e) {
+          } catch (BlockMissingException e) {//如果Block丢失了,则从Raid里抽取出正确的数据.//Extract good file from RAID
             setAlternateLocations(e, pos);
-          } catch (ChecksumException e) {
+          } catch (ChecksumException e) {	//如果校验和错误,同样从Raid里抽取出正确的数据. //
             setAlternateLocations(e, pos);
           }
         }
@@ -320,7 +320,7 @@ public class DistributedRaidFileSystem extends FilterFileSystem {
         }
       }
 
-      /**
+      /**这个函数非常重要,read出现丢块等异常时,会调用该方法,从RAID里抽取出正确的文件,将path指向新的文件.
        * Extract good file from RAID
        * @param curpos curexp the current exception
        * @param curpos the position of the current operation to be retried
