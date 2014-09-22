@@ -1118,7 +1118,7 @@ public class RaidNode implements RaidProtocol {
     return recoveredPath;
   }
 
-  /**
+  /**定期删除孤立的parity文件(如果文件已经被删除,则删除parity文件)
    * Periodically delete orphaned parity files.
    */
   class PurgeMonitor implements Runnable {
@@ -1136,7 +1136,7 @@ public class RaidNode implements RaidProtocol {
       }
     }
 
-    /**删除过时的parity文件?
+    /**删除过时的parity文件
      * Delete orphaned files. The reason this is done by a separate thread 
      * is to not burden the TriggerMonitor with scanning the 
      * destination directories.
@@ -1284,7 +1284,7 @@ public class RaidNode implements RaidProtocol {
     } 
   }
 
-  
+  /**对parity文件进行归档**/
   private void doHar() throws IOException, InterruptedException {
     
     PolicyList.CompareByPath lexi = new PolicyList.CompareByPath();
@@ -1301,33 +1301,33 @@ public class RaidNode implements RaidProtocol {
       LOG.info("Started archive scan");
       prevExec = now();
       
-      // fetch all categories
+      // 获取所有的categories//fetch all categories
       Collection<PolicyList> all = configMgr.getAllPolicies();
-            
+      // 对所有的category进行字典逆序排序.      
       // sort all policies by reverse lexicographical order. This is 
       // needed to make the nearest policy take precedence.
       PolicyList[] sorted = all.toArray(new PolicyList[all.size()]);
       Arrays.sort(sorted, lexi);
-
-      for (PolicyList category : sorted) {
-        for (PolicyInfo info: category.getAll()) {
+	
+      for (PolicyList category : sorted) {//遍历所有的category
+        for (PolicyInfo info: category.getAll()) {//便利每个category中所有的policy.
           String str = info.getProperty("time_before_har");
           String tmpHarPath = info.getProperty("har_tmp_dir");
           if (tmpHarPath == null) {
             tmpHarPath = "/tmp/raid_har";
           }
           if (str != null) {
-            try {
+            try {//根据配置项“time_before_har"计算截止时间.
               long cutoff = now() - ( Long.parseLong(str) * 24L * 3600000L );
-
+			  //获取\初始化destPrefixPath
               String destinationPrefix = getDestinationPath(conf, info);
               Path destPref = new Path(destinationPrefix.trim());
               FileSystem destFs = destPref.getFileSystem(conf); 
               destPref = destFs.makeQualified(destPref);
 
-              //get srcPaths
+              //获取srcPath \get srcPaths
               Path[] srcPaths = info.getSrcPathExpanded();
-              
+              //遍历srcPath中的每一个path.
               if ( srcPaths != null ){
                 for (Path srcPath: srcPaths) {
                   // expand destination prefix
@@ -1427,7 +1427,7 @@ public class RaidNode implements RaidProtocol {
     return;
   }
   
-  /**
+  /**定期生成har 文件.
    * Periodically generates HAR files
    */
   class HarMonitor implements Runnable {
