@@ -228,30 +228,30 @@ public class RaidNode implements RaidProtocol {
   public InetSocketAddress getListenerAddress() {
     return server.getListenerAddress();
   }
-  
+  /**raidnode初始化**/
   private void initialize(Configuration conf) 
     throws IOException, SAXException, InterruptedException, RaidConfigurationException,
            ClassNotFoundException, ParserConfigurationException {
-    this.conf = conf;
-    InetSocketAddress socAddr = RaidNode.getAddress(conf);
-    int handlerCount = conf.getInt("fs.raidnode.handler.count", 10);
-
+    this.conf = conf;//1.conf
+    InetSocketAddress socAddr = RaidNode.getAddress(conf);//2.获取socAddr
+    int handlerCount = conf.getInt("fs.raidnode.handler.count", 10);//3.handlerCount个数
+    //4.raid是否是本地模式
     isRaidLocal = conf.getBoolean("fs.raidnode.local", false);
-    // read in the configuration
+    //5.根据配置文件将raid策略封装到ConfigManager对象//  read in the configuration
     configMgr = new ConfigManager(conf);
 
-    // create rpc server 
+    //6.创建RPC Server// create rpc server 
     this.server = RPC.getServer(this, socAddr.getHostName(), socAddr.getPort(),
                                 handlerCount, false, conf);
-
+    //7.rpc-server port可能是临时的，要确保我们获取了正确的信息.
     // The rpc-server port can be ephemeral... ensure we have the correct info
     this.serverAddress = this.server.getListenerAddress();
     LOG.info("RaidNode up at: " + this.serverAddress);
-
+    //8.将initialized和running标志置true,启动rpc-server
     initialized = true;
     running = true;
     this.server.start(); // start RPC server
-
+    //启动守护线程 trigerThread和pugerThread,harThread.
     // start the deamon thread to fire polcies appropriately
     this.triggerThread = new Daemon(new TriggerMonitor());
     this.triggerThread.start();
@@ -302,7 +302,7 @@ public class RaidNode implements RaidProtocol {
     return null;
   }
 
-  /**
+  /**定期检查哪写文件需要做raid.
    * Periodically checks to see which policies should be fired.
    */
   class TriggerMonitor implements Runnable {
@@ -949,7 +949,7 @@ public class RaidNode implements RaidProtocol {
   
   }
   
-  /**
+  /**从parity块中抽取出正确的块. 将source文件中正常的block和从raid恢复出的block copy到一个新文件中.
    * Extract a good block from the parity block. This assumes that the corruption
    * is in the main file and the parity file is always good.
    */
@@ -1044,7 +1044,7 @@ public class RaidNode implements RaidProtocol {
     for (int i = 0; i < ins.length; i++) {
       ins[i].close();
     }
-
+    //现在，重新打开source文件和recovered block文件,将所有相关的数据copy到一个新文件(.recovered文件)
     // Now, reopen the source file and the recovered block file
     // and copy all relevant data to new file
     final Path recoveryDestination = 
@@ -1136,7 +1136,7 @@ public class RaidNode implements RaidProtocol {
       }
     }
 
-    /**
+    /**删除过时的parity文件?
      * Delete orphaned files. The reason this is done by a separate thread 
      * is to not burden the TriggerMonitor with scanning the 
      * destination directories.
@@ -1560,8 +1560,8 @@ public class RaidNode implements RaidProtocol {
    */
   public static void main(String argv[]) throws Exception {
     try {
-      StringUtils.startupShutdownMessage(RaidNode.class, argv, LOG);
-      RaidNode raid = createRaidNode(argv, null);
+      StringUtils.startupShutdownMessage(RaidNode.class, argv, LOG);//1.打一条启动日志.
+      RaidNode raid = createRaidNode(argv, null);					//2.创建raidnode,启动.
       if (raid != null) {
         raid.join();
       }

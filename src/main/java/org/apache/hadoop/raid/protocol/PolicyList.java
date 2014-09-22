@@ -35,7 +35,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.conf.Configuration;
 
-/**
+/**保持一个category的所有策略.这些策略同一时间只能应用一个,不能同时运行.
  * Maintains informatiom about all policies that belong to a category.
  * These policies have to be applied one-at-a-time and cannot be run
  * simultaneously.

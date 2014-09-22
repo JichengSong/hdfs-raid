@@ -38,7 +38,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileStatus;
 
-/**
+/**保持策略的信息.
  * Maintains information about one policy
  */
 public class PolicyInfo implements Writable {
@@ -54,7 +54,7 @@ public class PolicyInfo implements Writable {
   private Configuration conf;      // Hadoop configuration
 
   private Properties properties;   // Policy-dependent properties
-
+  //读写锁,保护policy相关操作.
   private ReentrantReadWriteLock plock; // protects policy operations.
   
   /**
@@ -66,7 +66,7 @@ public class PolicyInfo implements Writable {
     this.description = "";
     this.srcPath = null;
     this.properties = new Properties();
-    this.plock = new ReentrantReadWriteLock();
+    this.plock = new ReentrantReadWriteLock();//初始化读写锁.
   }
 
   /**
@@ -78,15 +78,15 @@ public class PolicyInfo implements Writable {
     this.description = "";
     this.srcPath = null;
     this.properties = new Properties();
-    this.plock = new ReentrantReadWriteLock();
+    this.plock = new ReentrantReadWriteLock();//初始化读写锁.
   }
 
-  /**
+  /**设置该policy将要作用于的srcPath
    * Sets the input path on which this policy has to be applied
    */
   public void setSrcPath(String in) throws IOException {
     srcPath = new Path(in);
-    srcPath = srcPath.makeQualified(srcPath.getFileSystem(conf));
+    srcPath = srcPath.makeQualified(srcPath.getFileSystem(conf));//makeQualifierd函数将srcPath标准/格式化.
   }
 
   /**
@@ -141,7 +141,7 @@ public class PolicyInfo implements Writable {
     return srcPath;
   }
 
-  /**
+  /**得到扩展的src path.
    * Get the expanded (unglobbed) forms of the srcPaths
    */
   public Path[] getSrcPathExpanded() throws IOException {

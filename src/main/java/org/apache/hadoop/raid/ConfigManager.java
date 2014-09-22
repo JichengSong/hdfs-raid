@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
 import org.apache.hadoop.raid.protocol.PolicyInfo;
 import org.apache.hadoop.raid.protocol.PolicyList;
 
-/**
+/**维护读入内存的configuration xml文件
  * Maintains the configuration xml file that is read into memory.
  */
 class ConfigManager {
@@ -50,7 +50,7 @@ class ConfigManager {
 
   /** Time to wait between checks of the config file */
   public static final long RELOAD_INTERVAL = 10 * 1000;
-
+ 
   /** Time to wait between successive runs of all policies */
   public static final long RESCAN_INTERVAL = 3600 * 1000;
   
